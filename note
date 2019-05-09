@@ -1,0 +1,88 @@
+1.SomeController 第一个程序 初始化的一个程序
+    SpringbootApplication这个是启动的主方法
+2。配置的两种方式
+    第一种  application.properties
+    server.port=8080  //端口号
+    server.servlet.context-path=/miao //路径
+    第二种 application.yml
+    server:
+        port: 8080
+        servlet:
+            context-path: /miao
+3。Actuator
+    里面有很多 可以百度了解
+    配置
+    #Actuator
+    management.server.port=9999
+    management.server.servlet.context-path=/actuator
+    management.endpoints.web.base-path=/actuator
+
+    访问：http://localhost:9999/actuator/actuator/health
+4。自定义错误页面
+在resources目录下建立public 文件夹在其下面建立error文件夹  对应错误编码生成html文件 如404.html
+5。多环境选择 --选择配置文件和接口调用不同
+ 5。1.创建配置文件 例：application-pro.properties   -后面是你的环境标识
+ 5。2.在文件application.properties 通过配置  spring.profiles.include= 来加载文件  值为文件名中的表示
+ 5。3.加载接口的时候在接口实现类或者方法上面添加@Profile("pro")标签 值为环境表示
+ 5。4.其他的正常开发
+6。读取配置文件中的值
+
+  6.1  类中通过加载配置文件
+      @PropertySource("classpath:custom.properties")
+  6.2 自定义String属性
+      配置文件中
+      #String
+      compoy.name=皮卡丘
+      类中属性
+       @Value("${compoy.name}")
+        private String name;
+  6.3对象属性
+    StudentDTO
+    类中中通过  @PropertySource("classpath:custom.properties")加载配置文件
+           @ConfigurationProperties("student")标志对象映射
+    配置文件中
+    student.name=shui
+    student.age=12
+  6.4 list<String>属性
+      StudentDTO
+      和上面一样但是 多了一层
+      配置文件中
+      student.sorce[0]=0
+      student.sorce[2]=2
+      student.sorce[1]=1
+  6.5 list<Object>属性
+  StudentDTO User
+   private List<User> studentDTOs;
+   要新建user类
+  #list<Object>属性
+  student.studentDTOs[0].age=0
+  student.studentDTOs[0].name=name0
+  student.studentDTOs[1].age=1
+  student.studentDTOs[1].name=name1
+7。支持jsp
+  7.1导入jar
+  <!--支持jsp-->
+          <dependency>
+              <groupId>org.apache.tomcat.embed</groupId>
+              <artifactId>tomcat-embed-jasper</artifactId>
+          </dependency>
+          <!--jsp页面使用jstl标签-->
+          <dependency>
+              <groupId>javax.servlet</groupId>
+              <artifactId>jstl</artifactId>
+          </dependency>
+  7.2 设置webapp资源位置
+          <resources>
+              <resource>
+                  <directory>src/main/webapp</directory>
+                  <targetPath>META_INF/resources</targetPath>
+                  <includes>
+                      <include>**/*.*</include>
+                  </includes>
+              </resource>
+          </resources>
+  7.3 支持jsp寻址
+      spring.mvc.view.prefix=/WEB-INF/jsp/
+      spring.mvc.view.suffix=.jsp
+
+
