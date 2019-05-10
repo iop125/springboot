@@ -1,8 +1,7 @@
 package com.miao.springboot.controller;
 
+import com.miao.springboot.common.RedisUtil;
 import com.miao.springboot.domain.po.UserPO;
-import com.miao.springboot.service.MybaitsService;
-import com.miao.springboot.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RedisController {
 
     @Autowired
-    private RedisService redisService;
+    private RedisUtil redisUtil;
 
     @RequestMapping("save")
-    public String save(UserPO userPO){
+    public String save(UserPO userPO) {
 
 
-        return  redisService.add("miaoyu","test")+"";
+        return redisUtil.set("miaoyu", "test") + "";
     }
 }
