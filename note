@@ -185,3 +185,10 @@
            int delete(Long id);
        }
 
+9 开启事务
+启动类中写上
+@EnableTransactionManagement  //开启事物
+
+在方法上添加
+    @Transactional  //添加事物注解
+

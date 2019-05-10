@@ -3,6 +3,7 @@ package com.miao.springboot.controller;
 import com.miao.springboot.dao.UserMapper;
 import com.miao.springboot.domain.po.UserPO;
 import com.miao.springboot.service.ChoseService;
+import com.miao.springboot.service.MybaitsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +17,13 @@ import javax.annotation.Resource;
 public class MybaitsController {
 
     @Autowired
-    private UserMapper userMapper;
+    private MybaitsService mybaitsService;
 
     @RequestMapping("save")
     public String save(UserPO userPO){
-        int i = userMapper.insert(userPO);
+        int i = mybaitsService.insert(userPO);
         System.out.println("----"+i);
 
-        return  userMapper.getAll().toString();
+        return  mybaitsService.getAll().toString();
     }
 }

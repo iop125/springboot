@@ -6,20 +6,20 @@
         id, name, age
     </sql>
 
-    <select id="getAll" resultType="user"  >
+    <select id="getAll" resultType="userPO"  >
         SELECT
         <include refid="Base_Column_List" />
         FROM user
     </select>
 
-    <select id="getOne" parameterType="java.lang.Long" resultType="user" >
+    <select id="getOne" parameterType="java.lang.Long" resultType="userPO" >
         SELECT
         <include refid="Base_Column_List" />
         FROM user
         WHERE id = #{id}
     </select>
 
-    <insert id="insert" parameterType="user" >
+    <insert id="insert" parameterType="userPO" >
         INSERT INTO
         user
         (name, age)
