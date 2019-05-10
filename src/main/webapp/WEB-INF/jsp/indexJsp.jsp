@@ -11,6 +11,10 @@
     <title>Title</title>
 </head>
 <body>
-indexJsp1111
+<form action="/mybaitsController/save">
+    name:<input type="text" name="name" id="name"/>
+    age:<input type="text" name="age" id="age"/>
+    <input type="submit" value="提交"/>
+</form>
 </body>
 </html>
