@@ -186,9 +186,18 @@
        }
 
 9 开启事务
-启动类中写上
-@EnableTransactionManagement  //开启事物
+    启动类中写上
+    @EnableTransactionManagement  //开启事物
 
-在方法上添加
-    @Transactional  //添加事物注解
+    在方法上添加
+        @Transactional  //添加事物注解
+10 redis
+    10。1 非注解的
+    RedisConfig和RedisUtil 弄好redisTemplate 使用 redisTemplate对redis进行操作
+    RedisController
+    10。2注解的不灵活  以后在说
+11。拦截器
+
+
+
 
