@@ -1,6 +1,6 @@
 package com.miao.springboot.configFile;
 
-import com.miao.springboot.interceptor.SomeInterceptor;
+import com.miao.springboot.controller.interceptor.SomeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;

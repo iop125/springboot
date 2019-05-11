@@ -204,7 +204,7 @@
 
     现全部体一个类中该需要继承 自 WebMvcConfigurationSupport 类，其 充当配置文件的角色。 充
 11。1 创建自己的拦截器  SomeInterceptor
-package com.miao.springboot.interceptor;
+package com.miao.springboot.controller.interceptor;
 
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -229,7 +229,7 @@ public class SomeInterceptor implements HandlerInterceptor {
 MyWebMvcConfiguration
 
 package com.miao.springboot.configFile;
-import com.miao.springboot.interceptor.SomeInterceptor;
+import com.miao.springboot.controller.interceptor.SomeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -241,6 +241,184 @@ public class MyWebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(sm).addPathPatterns("/redisController/**").excludePathPatterns("/mybaitsController/**");
     }
 }
+
+12 servlet
+ 若使用的servlet3。0+版本 可以直接使用Servlet的注解对setvlet进行注册 步骤2个
+ 1。在定义好的servlet 上使用@WebServlet
+ 2。在入口上添加 @ServletComponentScan注解
+ 若是servlet 2。5版本的只能使用配置类
+
+注解形式的
+ 12。1创建servlet类     SomeServlet
+
+     package com.miao.springboot.controller.servlet;
+     import javax.servlet.ServletException;
+     import javax.servlet.annotation.WebServlet;
+     import javax.servlet.http.HttpServlet;
+     import javax.servlet.http.HttpServletRequest;
+     import javax.servlet.http.HttpServletResponse;
+     import java.io.IOException;
+     import java.io.PrintWriter;
+     @WebServlet("/someServlet")
+     public class SomeServlet extends HttpServlet {
+         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+             PrintWriter pw = resp.getWriter();
+             pw.println("hello serlvet");
+         }
+     }
+ 12.2 修改入口类 添加servlet扫描
+     package com.miao.springboot;
+     import org.springframework.boot.SpringApplication;
+     import org.springframework.boot.autoconfigure.SpringBootApplication;
+     import org.springframework.boot.web.servlet.ServletComponentScan;
+     import org.springframework.cache.annotation.EnableCaching;
+     import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+     @SpringBootApplication
+     @EnableTransactionManagement    //开启事物
+     @EnableCaching                  //开启缓存
+     @ServletComponentScan("com.miao.springboot.controller.servlet")         //开启serlet扫描
+     public class SpringbootApplication {
+
+         public static void main(String[] args) {
+             SpringApplication.run(SpringbootApplication.class, args);
+         }
+
+     }
+配置形式的
+ 12。1创建servlet类     SomeServlet
+
+package com.miao.springboot.controller.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class SomeXmlServlet extends HttpServlet {
+
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        PrintWriter pw = resp.getWriter();
+        pw.println("hello serlvet");
+    }
+}
+12。2 定义配置类  MyApplicationContext
+package com.miao.springboot.configFile;
+
+import com.miao.springboot.controller.servlet.SomeXmlServlet;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration  //当前类为 config类  相当于spring容器
+public class MyApplicationContext {
+    @Bean
+    public ServletRegistrationBean<SomeXmlServlet> getServletBean() {
+        SomeXmlServlet ss = new SomeXmlServlet();
+        //注册servlet
+        return new ServletRegistrationBean<>(ss, "/someXmlServlet");
+    }
+}
+13 filter
+ 若使用的servlet3。0+版本 可以直接使用filter的注解对filter进行注册 步骤2个
+ 1。在定义好的filter 上使用@WebFilter
+ 2。在入口上添加 @ServletComponentScan注解
+ 若是servlet 2。5版本的只能使用配置类
+13.1 fiter类
+package com.miao.springboot.controller.filter;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import java.io.IOException;
+@WebFilter("/*")
+public class MyFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        System.out.println("MyFilter - init");
+    }
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("MyFilter - doFilter g过滤了吧");
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+    @Override
+    public void destroy() {
+        System.out.println("MyFilter - destroy ");
+    }
+}
+
+13.2 修改入口 添加sfilter扫描
+package com.miao.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@SpringBootApplication
+@EnableTransactionManagement    //开启事物
+@EnableCaching                  //开启缓存
+@ServletComponentScan("com.miao.springboot.controller.*")         //开启serlet&filter扫描
+public class SpringbootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringbootApplication.class, args);
+    }
+}
+配置方式
+
+13.1 fiter类
+package com.miao.springboot.controller.filter;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import java.io.IOException;
+@WebFilter("/*")
+public class MyPFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        System.out.println("MyFilter - init");
+    }
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("MyFilter - doFilter g过滤了吧");
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+    @Override
+    public void destroy() {
+        System.out.println("MyFilter - destroy ");
+    }
+}
+13.2 配置文件
+package com.miao.springboot.configFile;
+
+import com.miao.springboot.controller.filter.MyPFilter;
+import com.miao.springboot.controller.servlet.SomeXmlServlet;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration  //当前类为 config类  相当于spring容器
+public class MyApplicationContext {
+    @Bean
+    public ServletRegistrationBean<SomeXmlServlet> getServletBean() {
+        SomeXmlServlet ss = new SomeXmlServlet();
+        //注册servlet
+        return new ServletRegistrationBean<>(ss, "/someXmlServlet");
+    }
+    @Bean
+    public FilterRegistrationBean<MyPFilter> getFilterBean() {
+        MyPFilter ss = new MyPFilter();
+        //注册servlet
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(ss);
+        filterRegistrationBean.addUrlPatterns("/mybaitsController/*");
+        return filterRegistrationBean;
+    }
+}
+
 
 
 
