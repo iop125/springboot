@@ -197,6 +197,51 @@
     RedisController
     10。2注解的不灵活  以后在说
 11。拦截器
+    在非 Spring Boot工程中若要使用 SpringMVC的拦截器，在 定义好后需要的拦截器，在 定义好后需要的拦截器，在 定义好后需要的拦截器，
+    在 定义好后需要的拦截器，在 定义好后需要的拦截器，在 定义好后需要Spring配置文件中对其进行注册。但 配置文件中对其进行注册。
+    但 Spring Boot工程中没有了Spring配置文件，那么如何使用拦 配置文件，那么如何使用拦 配置文件，那么如何使用拦 截器呢？
+    Spring Boot对于原来在配置文件的内容，现全部体一个类中该需要继承
+
+    现全部体一个类中该需要继承 自 WebMvcConfigurationSupport 类，其 充当配置文件的角色。 充
+11。1 创建自己的拦截器  SomeInterceptor
+package com.miao.springboot.interceptor;
+
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class SomeInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("执行了拦截器  哈哈");
+        return true;
+    }
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+    }
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+    }
+}
+11。2 通过类定义 配置文件类
+MyWebMvcConfiguration
+
+package com.miao.springboot.configFile;
+import com.miao.springboot.interceptor.SomeInterceptor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+@Configuration
+public class MyWebMvcConfiguration extends WebMvcConfigurationSupport {
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        SomeInterceptor sm = new SomeInterceptor();
+        registry.addInterceptor(sm).addPathPatterns("/redisController/**").excludePathPatterns("/mybaitsController/**");
+    }
+}
+
 
 
 
