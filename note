@@ -419,6 +419,21 @@ public class MyApplicationContext {
     }
 }
 
+14 Thymeleaf
+1。配置文件中
+#thymeleaf 缓存
+spring.thymeleaf.cache=false
+
+2。在src/main/resources/templates目录下定义 目录下定义 index.html页
+3。
+    <!--thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+
+
 
 
 
