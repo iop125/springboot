@@ -71,7 +71,7 @@
               <groupId>javax.servlet</groupId>
               <artifactId>jstl</artifactId>
           </dependency>
-  7.2 设置webapp资源位置
+  7.2 设置webapp资源位置 --pom.xml
           <resources>
               <resource>
                   <directory>src/main/webapp</directory>
